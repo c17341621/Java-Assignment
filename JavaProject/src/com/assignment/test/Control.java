@@ -8,6 +8,7 @@ public class Control {
 		FileProcessor fp = new FileProcessor();
 		
 		fp.printCol("src\\trainingData.csv");
+		MyUI ui1 = new MyUI();
 	}
 
 }
