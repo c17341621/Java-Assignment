@@ -2,22 +2,39 @@ package com.assignment.test;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
-public class MyUI extends JFrame
+public class MyUI extends JFrame implements ActionListener
 {
+	//patient object which will be accessed by control
+	Patient p1;
+	//boolean used to determine whether a submission has been made
+	private boolean submissionMade = false;
+	
+	//panels
+	
 	JPanel panel1 = new JPanel();
+	JPanel namePanel = new JPanel();
 	JPanel tempPanel = new JPanel();
 	JPanel achesPanel = new JPanel();
 	JPanel stPanel = new JPanel();
 	JPanel submitPanel = new JPanel();
+	
+	//name components
+	JLabel nameLabel = new JLabel("Name:");
+	JTextField nameField = new JTextField();
+	
 	
 	//Temperature components
 	ButtonGroup temperatureGroup = new ButtonGroup();
@@ -45,28 +62,48 @@ public class MyUI extends JFrame
 	
 	public MyUI()
 	{
-		temperatureGroup.add(coolButton);
-		temperatureGroup.add(normalButton);
-		temperatureGroup.add(hotButton);
-		
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
+		
+		nameField.setColumns(20);
+		namePanel.add(nameLabel);
+		namePanel.add(nameField);
+		panel1.add(namePanel);
+		
+		temperatureGroup.add(coolButton);
+		coolButton.setActionCommand("cool");
+		temperatureGroup.add(normalButton);
+		normalButton.setActionCommand("normal");
+		temperatureGroup.add(hotButton);
+		hotButton.setActionCommand("hot");
+		
+		
 		
 		tempPanel.add(tempLabel);
 		tempPanel.add(coolButton);
 		tempPanel.add(normalButton);
 		tempPanel.add(hotButton);
 		panel1.add(tempPanel);
+		
+		achesGroup.add(aYes);
+		aYes.setActionCommand("yes");
+		achesGroup.add(aNo);
+		aNo.setActionCommand("no");
 		achesPanel.add(achesLabel);
 		achesPanel.add(aYes);
 		achesPanel.add(aNo);
 		panel1.add(achesPanel);
 		
 		stPanel.add(stLabel);
+		stGroup.add(stYes);
+		stYes.setActionCommand("yes");
+		stGroup.add(stNo);
+		stNo.setActionCommand("no");
 		stPanel.add(stYes);
 		stPanel.add(stNo);
 		panel1.add(stPanel);
 		
 		submitPanel.add(submit);
+		submit.addActionListener(this);
 		
 		panel1.add(submitPanel);
 		
@@ -77,6 +114,39 @@ public class MyUI extends JFrame
 		panel1.setPreferredSize(new Dimension(200,50));
 		add(panel1);
 		setVisible(true);
-		setSize(400,200);
+		setSize(500,200);
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		String pName = nameField.getText();
+		String pTemp = getSelectedButton(temperatureGroup);
+		String pAches = getSelectedButton(achesGroup);
+		String pSoreThroat = getSelectedButton(stGroup);
+		
+		if(nameField.getText().equals(""))
+		{
+			JOptionPane.showMessageDialog(null,"Please enter a name.");
+		}
+		else
+		{	
+			//submissionMade = true;
+			p1 = new Patient(pName, pTemp, pAches, pSoreThroat);
+			//System.out.println(p1);
+			setSubmissionMade(true);
+		}
+	}
+	
+	public String getSelectedButton(ButtonGroup bg)
+	{
+		return bg.getSelection().getActionCommand();
+	}
+
+	public boolean isSubmissionMade() {
+		return submissionMade;
+	}
+
+	public void setSubmissionMade(boolean submissionMade) {
+		this.submissionMade = submissionMade;
 	}
 }
