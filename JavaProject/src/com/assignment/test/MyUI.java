@@ -20,7 +20,7 @@ public class MyUI extends JFrame implements ActionListener
 	//patient object which will be accessed by control
 	Patient p1;
 	//boolean used to determine whether a submission has been made
-	private boolean submissionMade = false;
+	private boolean submissionMade;
 	
 	//panels
 	
@@ -62,6 +62,8 @@ public class MyUI extends JFrame implements ActionListener
 	
 	public MyUI()
 	{
+		submissionMade = false;
+		
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		
 		nameField.setColumns(20);
@@ -119,10 +121,11 @@ public class MyUI extends JFrame implements ActionListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		String pName = nameField.getText();
-		String pTemp = getSelectedButton(temperatureGroup);
-		String pAches = getSelectedButton(achesGroup);
-		String pSoreThroat = getSelectedButton(stGroup);
+		String pName;
+		String pTemp;
+		String pAches;
+		String pSoreThroat;
+		Calculation calc1 = new Calculation();
 		
 		if(nameField.getText().equals(""))
 		{
@@ -130,10 +133,15 @@ public class MyUI extends JFrame implements ActionListener
 		}
 		else
 		{	
+			pName = nameField.getText();                
+			pTemp = getSelectedButton(temperatureGroup);
+			pAches = getSelectedButton(achesGroup);     
+			pSoreThroat = getSelectedButton(stGroup);   
+			
 			//submissionMade = true;
+			
 			p1 = new Patient(pName, pTemp, pAches, pSoreThroat);
-			//System.out.println(p1);
-			setSubmissionMade(true);
+			JOptionPane.showMessageDialog(null,calc1.naiveBayesProb(p1));
 		}
 	}
 	
