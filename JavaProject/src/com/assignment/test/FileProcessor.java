@@ -175,7 +175,7 @@ public class FileProcessor
 	}
 	
 	//returns the number of times a value occurs in a given column while the last column in the same row is "yes"
-	public int countColYes(String fileName, int column, String value)
+	public int countColYes(String fileName, int column, String value, String yValue)
 	{
 		boolean hasValue;//used to tell us if a specific value has appeared
 		int colCounter;
@@ -185,7 +185,7 @@ public class FileProcessor
 		Scanner lineScanner;
 		int counter;
 		String colValue = "";
-		String yValue = "yes";
+		
 		counter = 0;
 		
 		
