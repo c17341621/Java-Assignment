@@ -6,81 +6,60 @@ import java.text.DecimalFormat;
 
 public class Calculation 
 {
-	public String naiveBayesProb(Patient p1)
+	public float naiveBayesProb(Patient p1)
 	{
-		FileProcessor fp = new FileProcessor();
-		DecimalFormat df = new DecimalFormat("#.########");
+		
+		//training data path
 		String fName = "src\\trainingData.csv";
-		int numLines = fp.countLines(fName);
-		System.out.println(numLines);
-		int yesCount = fp.countCol(fName, 3, "yes");//number of times yes appeared in final column
-		int noCount = numLines - yesCount;
-		System.out.println(yesCount);
-		double pYes = (float)yesCount/numLines;//probability of yes
-		double pNo = 1 - pYes;//probability of no
-		double tonYes;
-		double tonNo;
-		String sTonYes;
-		String sTonNo;
-		
-		System.out.println(pYes);
-		System.out.println(pNo);
-		
-		
-		double tempYes;
-		double tempNo;
-		
-		double achesYes;
-		double achesNo;
-		
-		double stYes;
-		double stNo;
-		
-		double temp = fp.countCol(fName, 0, p1.getTemperature());
-		double aches = fp.countCol(fName, 1, p1.getAches());
-		double st = fp.countCol(fName, 2, p1.getSoreThroat());
+		FileProcessor fp = new FileProcessor(); 
+		//total number of lines
+		int rows = fp.countLines(fName);
+		//total number of yes in final column
+		int tonYes = fp.countCol(fName, 3, "yes");
+		int tonNo = fp.countCol(fName, 3, "no");
+		//overall probabilities of each outcome for tonsilitis
+		float probTonYes = (float)tonYes/rows;
+		float probTonNo = (float)tonNo/rows;
+		System.out.println(probTonYes);
+		//patient symptoms
+		String patientTemp = p1.getTemperature();
+		String patientAches = p1.getAches();
+		String patientSoreThroat = p1.getSoreThroat();
+		//need probability of each symptom while tonsilitis occurs
+		float probTemp =(float)fp.countColYes(fName, 0, patientTemp, "yes")/tonYes; 
+		System.out.println("temp:"+probTemp);
+		float probAches =(float) fp.countColYes(fName, 1, patientAches, "yes") / tonYes; 
+		System.out.println("Aches:"+probAches);
+		float probSoreThroat =(float) fp.countColYes(fName, 2, patientSoreThroat, "yes") / tonYes; 
+		System.out.println("ST:"+probSoreThroat);
+		//need probability of each symptom while tonsilitis does not occur
+		float noProbTemp =(float)fp.countColYes(fName, 0, patientTemp, "no")/tonNo; 
+		float noProbAches =(float) fp.countColYes(fName, 1, patientAches, "no") / tonNo; 
+		float noProbSoreThroat =(float) fp.countColYes(fName, 2, patientSoreThroat, "no") / tonNo; 
 		
 		
-		//number of times each of the patient's entries have appeared along side Yes in the tonilitis column 
-		tempYes = (double)fp.countColYes(fName, 0, p1.getTemperature(), "yes") / (double)yesCount;
-		tempNo = (double)fp.countColYes(fName, 0, p1.getTemperature(), "no") / (double)noCount;
 		
-		achesYes = (double)fp.countColYes(fName, 1, p1.getAches(), "yes") / (double)yesCount;;
-		achesNo = (double)fp.countColYes(fName, 1, p1.getAches(), "no") / (double)noCount;;
+		float yesSide = probTemp * probAches * probSoreThroat * probTonYes;
 		
-		stYes =(double) fp.countColYes(fName, 2, p1.getSoreThroat(), "yes") / (double)yesCount;;
-		stNo = (double)fp.countColYes(fName, 2, p1.getSoreThroat(), "no") / (double)noCount;;
+		float noSide = noProbTemp * noProbAches * noProbSoreThroat * probTonNo;
 		
-		tonYes = ((double)((tempYes * achesYes * stYes) * (pYes)));
-		tonNo = ((double)(tempNo * achesNo * stNo) * pNo);
+		float sumSide = yesSide + noSide;
+		System.out.println(yesSide);
+		System.out.println(noSide);
+		float finYes = yesSide/sumSide;
+		float finNo = noSide/sumSide;
 		
-		//need amount of times each outcome occurs while there is tonsilitis ie. cool -> tonsilitis, normal -> tonsilitis
 		
-		System.out.println(tonYes);
-		System.out.println(tonNo);
-		System.out.println (temp * aches * st);
-		tonYes = tonYes / (temp * aches * st);
-		tonNo = tonNo / (temp * aches * st);
 		
-		sTonYes = df.format(tonYes);
-		sTonNo = df.format(tonNo);
-		
-		System.out.println(tonYes);
-		System.out.println(tonNo);
-		if(tonYes > tonNo)
-		{
-			return sTonYes;
-		}
-		else
-		{
-			return sTonNo;
-		}
+		float percent = finYes * 100;
+		return percent;
 	}
-	public double round(double value, int places) {
+	private static double round(double value, int places) //taken from https://www.baeldung.com/java-round-decimal-number
+	{
 	    if (places < 0) throw new IllegalArgumentException();
-
-	    BigDecimal bd = new BigDecimal(value);
+	 
+	    BigDecimal bd = new BigDecimal(Double.toString(value));
 	    bd = bd.setScale(places, RoundingMode.HALF_UP);
-	    return bd.doubleValue();
+	    return bd.floatValue();
 	}
 }

@@ -24,7 +24,7 @@ public class MyUI extends JFrame implements ActionListener
 	
 	//panels
 	
-	JPanel panel1 = new JPanel();
+	JPanel patientPanel = new JPanel();
 	JPanel namePanel = new JPanel();
 	JPanel tempPanel = new JPanel();
 	JPanel achesPanel = new JPanel();
@@ -64,27 +64,30 @@ public class MyUI extends JFrame implements ActionListener
 	{
 		submissionMade = false;
 		
-		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
+		
+		//patient panel start
+		patientPanel.setLayout(new BoxLayout(patientPanel, BoxLayout.Y_AXIS));
 		
 		nameField.setColumns(20);
 		namePanel.add(nameLabel);
 		namePanel.add(nameField);
-		panel1.add(namePanel);
+		patientPanel.add(namePanel);
 		
 		temperatureGroup.add(coolButton);
+		
 		coolButton.setActionCommand("cool");
 		temperatureGroup.add(normalButton);
 		normalButton.setActionCommand("normal");
 		temperatureGroup.add(hotButton);
 		hotButton.setActionCommand("hot");
 		
-		
+		coolButton.setSelected(true);
 		
 		tempPanel.add(tempLabel);
 		tempPanel.add(coolButton);
 		tempPanel.add(normalButton);
 		tempPanel.add(hotButton);
-		panel1.add(tempPanel);
+		patientPanel.add(tempPanel);
 		
 		achesGroup.add(aYes);
 		aYes.setActionCommand("yes");
@@ -93,7 +96,9 @@ public class MyUI extends JFrame implements ActionListener
 		achesPanel.add(achesLabel);
 		achesPanel.add(aYes);
 		achesPanel.add(aNo);
-		panel1.add(achesPanel);
+		patientPanel.add(achesPanel);
+		
+		aYes.setSelected(true);
 		
 		stPanel.add(stLabel);
 		stGroup.add(stYes);
@@ -102,19 +107,24 @@ public class MyUI extends JFrame implements ActionListener
 		stNo.setActionCommand("no");
 		stPanel.add(stYes);
 		stPanel.add(stNo);
-		panel1.add(stPanel);
+		patientPanel.add(stPanel);
+		
+		stYes.setSelected(true);
 		
 		submitPanel.add(submit);
 		submit.addActionListener(this);
 		
-		panel1.add(submitPanel);
+		patientPanel.add(submitPanel);
 		
 		
-		coolButton.setBorderPainted(true);
-		normalButton.setBorderPainted(true);
-		hotButton.setBorderPainted(true);
-		panel1.setPreferredSize(new Dimension(200,50));
-		add(panel1);
+		
+		patientPanel.setPreferredSize(new Dimension(200,50));
+		add(patientPanel);
+		
+		//patient panel end
+		
+		
+		
 		setVisible(true);
 		setSize(500,200);
 	}
@@ -141,7 +151,7 @@ public class MyUI extends JFrame implements ActionListener
 			//submissionMade = true;
 			
 			p1 = new Patient(pName, pTemp, pAches, pSoreThroat);
-			JOptionPane.showMessageDialog(null,calc1.naiveBayesProb(p1));
+			JOptionPane.showMessageDialog(null,"There is a " +calc1.naiveBayesProb(p1) + "% chance that you have tonsilitis");
 		}
 	}
 	

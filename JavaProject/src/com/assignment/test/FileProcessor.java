@@ -175,7 +175,7 @@ public class FileProcessor
 	}
 	
 	//returns the number of times a value occurs in a given column while the last column in the same row is "yes"
-	public int countColYes(String fileName, int column, String value, String yValue)
+	public int countColYes(String fileName, int column, String value, String yesOrNo)
 	{
 		boolean hasValue;//used to tell us if a specific value has appeared
 		int colCounter;
@@ -226,7 +226,7 @@ public class FileProcessor
 				colCounter++;
 			}
 			//System.out.println(colValue);
-			if((hasValue == true) && colValue.equals(yValue))//increments counter if value exists in correct place and last value in column is "yes"
+			if((hasValue == true) && colValue.equals(yesOrNo))//increments counter if value exists in correct place and last value in column is "yes"
 			{
 				counter++;
 				
