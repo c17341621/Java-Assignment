@@ -239,4 +239,5 @@ public class FileProcessor
 		fileScanner.close();
 		return counter;
 	}
+	//public ArrayList<Patient> 
 }

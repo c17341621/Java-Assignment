@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -14,7 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
+/*
+ * UI class that allows a user to enter their symptoms and recieve a percentage chance of having tonsilitis
+ */
 public class MyUI extends JFrame implements ActionListener
 {
 	//patient object which will be accessed by control
@@ -59,7 +62,7 @@ public class MyUI extends JFrame implements ActionListener
 	JRadioButton stNo = new JRadioButton("No");
 	
 	JButton submit = new JButton("Submit");
-	
+	JButton test = new JButton("Test Data");
 	public MyUI()
 	{
 		submissionMade = false;
@@ -81,7 +84,7 @@ public class MyUI extends JFrame implements ActionListener
 		temperatureGroup.add(hotButton);
 		hotButton.setActionCommand("hot");
 		
-		coolButton.setSelected(true);
+		//coolButton.setSelected(true);
 		
 		tempPanel.add(tempLabel);
 		tempPanel.add(coolButton);
@@ -98,7 +101,7 @@ public class MyUI extends JFrame implements ActionListener
 		achesPanel.add(aNo);
 		patientPanel.add(achesPanel);
 		
-		aYes.setSelected(true);
+		//aYes.setSelected(true);
 		
 		stPanel.add(stLabel);
 		stGroup.add(stYes);
@@ -109,10 +112,12 @@ public class MyUI extends JFrame implements ActionListener
 		stPanel.add(stNo);
 		patientPanel.add(stPanel);
 		
-		stYes.setSelected(true);
+		//stYes.setSelected(true);
 		
 		submitPanel.add(submit);
+		submitPanel.add(test);
 		submit.addActionListener(this);
+		test.addActionListener(this);
 		
 		patientPanel.add(submitPanel);
 		
@@ -136,22 +141,36 @@ public class MyUI extends JFrame implements ActionListener
 		String pAches;
 		String pSoreThroat;
 		Calculation calc1 = new Calculation();
+		ArrayList<Patient> pList = new ArrayList<Patient>();
 		
-		if(nameField.getText().equals(""))
+		if(e.getSource() == submit)
 		{
-			JOptionPane.showMessageDialog(null,"Please enter a name.");
+			if(nameField.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Please enter a name.");
+			}
+			//check to see if a button for each symptom has been pressed
+			else if(( (coolButton.isSelected() == false) &&  (normalButton.isSelected() == false) &&  (hotButton.isSelected() == false)) || ((aYes.isSelected() == false) && (aNo.isSelected() == false)) || (stYes.isSelected() == false) && (stNo.isSelected() == false))
+			{
+				JOptionPane.showMessageDialog(null,"Please enter Your values.");
+			}
+			else
+			{	
+				pName = nameField.getText();                
+				pTemp = getSelectedButton(temperatureGroup);
+				pAches = getSelectedButton(achesGroup);     
+				pSoreThroat = getSelectedButton(stGroup);   
+				
+				//submissionMade = true;
+				
+				p1 = new Patient(pName, pTemp, pAches, pSoreThroat);
+				JOptionPane.showMessageDialog(null,"There is a " + calc1.naiveBayesProb(p1) + "% chance that you have tonsilitis");
+			}
+			
 		}
-		else
-		{	
-			pName = nameField.getText();                
-			pTemp = getSelectedButton(temperatureGroup);
-			pAches = getSelectedButton(achesGroup);     
-			pSoreThroat = getSelectedButton(stGroup);   
-			
-			//submissionMade = true;
-			
-			p1 = new Patient(pName, pTemp, pAches, pSoreThroat);
-			JOptionPane.showMessageDialog(null,"There is a " +calc1.naiveBayesProb(p1) + "% chance that you have tonsilitis");
+		else if(e.getSource() == test)
+		{
+			JOptionPane.showMessageDialog(null,"testy boiiiii");
 		}
 	}
 	
