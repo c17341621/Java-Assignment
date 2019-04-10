@@ -132,6 +132,7 @@ public class MyUI extends JFrame implements ActionListener
 		
 		setVisible(true);
 		setSize(500,200);
+		setLocation(500,500);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -142,6 +143,9 @@ public class MyUI extends JFrame implements ActionListener
 		String pSoreThroat;
 		Calculation calc1 = new Calculation();
 		ArrayList<Patient> pList = new ArrayList<Patient>();
+		FileProcessor testProcessor = new FileProcessor();
+		String testDataName = "src\\testData.csv";
+		String trainingDataName = "src\\trainingData.csv";
 		
 		if(e.getSource() == submit)
 		{
@@ -163,14 +167,16 @@ public class MyUI extends JFrame implements ActionListener
 				
 				//submissionMade = true;
 				
-				p1 = new Patient(pName, pTemp, pAches, pSoreThroat);
+				p1 = new Patient(pTemp, pAches, pSoreThroat);
 				JOptionPane.showMessageDialog(null,"There is a " + calc1.naiveBayesProb(p1) + "% chance that you have tonsilitis");
 			}
 			
 		}
 		else if(e.getSource() == test)
 		{
-			JOptionPane.showMessageDialog(null,"testy boiiiii");
+			JOptionPane.showMessageDialog(null,"Data is approximately " + calc1.testData(trainingDataName, testDataName) + "% accurate");
+			
+			
 		}
 	}
 	

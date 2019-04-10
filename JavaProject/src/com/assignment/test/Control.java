@@ -6,14 +6,10 @@ public class Control {
 
 	public static void main(String[] args)
 	{
-		boolean submitted = false;
-		String x = "yes";
-		String y = "yes";
-		System.out.println(x.equals("yes"));
+		
 				
 		// TODO Auto-generated method stub
-		String fName = "src\\trainingData.csv";
-		FileProcessor fp = new FileProcessor();
+		
 		//int i = 0;
 		//fp.printCol("src\\trainingData.csv");
 		MyUI ui1 = new MyUI();

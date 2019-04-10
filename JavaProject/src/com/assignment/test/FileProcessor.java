@@ -2,6 +2,7 @@ package com.assignment.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -239,5 +240,32 @@ public class FileProcessor
 		fileScanner.close();
 		return counter;
 	}
-	//public ArrayList<Patient> 
+	public ArrayList<Patient> rowsToPatients(String fileName)
+	{
+		File f1 = new File(fileName);
+		Scanner fileScanner;
+		String line;
+		String words[];
+		ArrayList<Patient> patients = new ArrayList<Patient>();
+		
+		try
+		{
+			fileScanner = new Scanner(f1);
+		
+		}
+		catch (FileNotFoundException e)
+		{
+			System.out.println("Training data not found");
+			return null;
+		}
+		
+		while(fileScanner.hasNext())
+		{
+			line = fileScanner.next();
+			words = line.split(",");
+			patients.add(new Patient(words[0], words[1], words[2], words[3]));
+		}
+		fileScanner.close();
+		return patients;
+	}
 }

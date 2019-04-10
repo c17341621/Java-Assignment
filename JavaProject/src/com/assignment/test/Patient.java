@@ -2,33 +2,38 @@ package com.assignment.test;
 
 public class Patient 
 {
-	private String patientName;
+	
 	private String temperature;
 	private String aches;
 	private String soreThroat;
+	private String tonsillitis;
 	
-	public Patient(String pName, String pTemp, String pAches, String pSoreThroat)
+	public Patient(String pTemp, String pAches, String pSoreThroat)
 	{
-		setPatientName(pName);
+		
 		setTemperature(pTemp);
 		setAches(pAches);
 		setSoreThroat(pSoreThroat);
 	}
 	
+	public Patient(String pTemp, String pAches, String pSoreThroat, String pTonsillitis)
+	{
+		
+		setTemperature(pTemp);
+		setAches(pAches);
+		setSoreThroat(pSoreThroat);
+		setTonsillitis(pTonsillitis);
+	}
+	
+	
 	public String toString()
 	{
 		String summary;
-		summary = ("Name: " + getPatientName() + "\nTemperature: " + getTemperature() + "\nAches: " + getAches()+ "\nSore Throat: " + getSoreThroat());
+		summary = ("Temperature: " + getTemperature() + "\nAches: " + getAches()+ "\nSore Throat: " + getSoreThroat());
 		return summary;
 	}
 
-	public String getPatientName() {
-		return patientName;
-	}
-
-	public void setPatientName(String patientName) {
-		this.patientName = patientName;
-	}
+	
 
 	public String getTemperature() {
 		return temperature;
@@ -52,5 +57,13 @@ public class Patient
 
 	public void setSoreThroat(String soreThroat) {
 		this.soreThroat = soreThroat;
+	}
+
+	public String getTonsillitis() {
+		return tonsillitis;
+	}
+
+	public void setTonsillitis(String tonsillitis) {
+		this.tonsillitis = tonsillitis;
 	}
 }
