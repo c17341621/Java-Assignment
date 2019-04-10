@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
+
 /*
  * A class for reading and manipulating the data in the csv file "trainingData.csv"
  */
@@ -268,4 +270,6 @@ public class FileProcessor
 		fileScanner.close();
 		return patients;
 	}
+	
+	
 }

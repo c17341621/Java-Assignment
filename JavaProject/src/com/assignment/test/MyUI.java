@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 /*
  * UI class that allows a user to enter their symptoms and recieve a percentage chance of having tonsilitis
  */
@@ -33,6 +35,8 @@ public class MyUI extends JFrame implements ActionListener
 	JPanel achesPanel = new JPanel();
 	JPanel stPanel = new JPanel();
 	JPanel submitPanel = new JPanel();
+	
+	JPanel filePanel = new JPanel();
 	
 	//name components
 	JLabel nameLabel = new JLabel("Name:");
@@ -63,6 +67,14 @@ public class MyUI extends JFrame implements ActionListener
 	
 	JButton submit = new JButton("Submit");
 	JButton test = new JButton("Test Data");
+	
+	JButton fMenuButton = new JButton("Select data files");
+	JButton selectTrainData = new JButton("Select Training Data");
+	JButton selectTestData = new JButton("Select Test Data");
+	JButton returnToMain = new JButton("Return to Main Menu");
+	
+	String testDataName = "src\\testData.csv";
+	String trainingDataName = "src\\trainingData.csv";
 	public MyUI()
 	{
 		submissionMade = false;
@@ -70,6 +82,7 @@ public class MyUI extends JFrame implements ActionListener
 		
 		//patient panel start
 		patientPanel.setLayout(new BoxLayout(patientPanel, BoxLayout.Y_AXIS));
+		
 		
 		nameField.setColumns(20);
 		namePanel.add(nameLabel);
@@ -116,8 +129,11 @@ public class MyUI extends JFrame implements ActionListener
 		
 		submitPanel.add(submit);
 		submitPanel.add(test);
+		submitPanel.add(fMenuButton);
 		submit.addActionListener(this);
 		test.addActionListener(this);
+		fMenuButton.addActionListener(this);
+		
 		
 		patientPanel.add(submitPanel);
 		
@@ -127,7 +143,14 @@ public class MyUI extends JFrame implements ActionListener
 		add(patientPanel);
 		
 		//patient panel end
-		
+		filePanel.setVisible(false);
+		filePanel.add(selectTrainData);
+		selectTrainData.addActionListener(this);
+		filePanel.add(selectTestData);
+		selectTestData.addActionListener(this);
+		filePanel.add(returnToMain);
+		returnToMain.addActionListener(this);
+		patientPanel.add(filePanel);
 		
 		
 		setVisible(true);
@@ -144,8 +167,8 @@ public class MyUI extends JFrame implements ActionListener
 		Calculation calc1 = new Calculation();
 		ArrayList<Patient> pList = new ArrayList<Patient>();
 		FileProcessor testProcessor = new FileProcessor();
-		String testDataName = "src\\testData.csv";
-		String trainingDataName = "src\\trainingData.csv";
+		String backUp; //acts as a backup incase a user does not select a correct file
+		
 		
 		if(e.getSource() == submit)
 		{
@@ -178,6 +201,32 @@ public class MyUI extends JFrame implements ActionListener
 			
 			
 		}
+		else if(e.getSource() == fMenuButton)
+		{
+			fileMenuOn();
+		}
+		else if(e.getSource() == returnToMain)
+		{
+			fileMenuOff();
+		}
+		else if(e.getSource() == selectTestData)
+		{
+			backUp = testDataName;
+			testDataName = chooseFile();
+			if(testDataName == null)
+			{
+				testDataName = backUp;
+			}
+		}
+		else if(e.getSource() == selectTrainData)
+		{
+			backUp = trainingDataName;
+			trainingDataName = chooseFile();
+			if(trainingDataName.equals(null))
+			{
+				trainingDataName = backUp;
+			}
+		}
 	}
 	
 	public String getSelectedButton(ButtonGroup bg)
@@ -191,5 +240,45 @@ public class MyUI extends JFrame implements ActionListener
 
 	public void setSubmissionMade(boolean submissionMade) {
 		this.submissionMade = submissionMade;
+	}
+	
+	private void fileMenuOn()
+	{
+		namePanel.setVisible(false);
+		tempPanel.setVisible(false);
+		achesPanel.setVisible(false);
+		stPanel.setVisible(false);
+		submitPanel.setVisible(false);
+		
+		filePanel.setVisible(true);
+	}
+	private void fileMenuOff()
+	{
+		namePanel.setVisible(true);
+		tempPanel.setVisible(true);
+		achesPanel.setVisible(true);
+		stPanel.setVisible(true);
+		submitPanel.setVisible(true);
+		
+		filePanel.setVisible(false);
+	}
+	public String chooseFile()
+	{
+		JFileChooser myFile = new JFileChooser();
+		String ext;
+		myFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		myFile.setFileFilter(new FileNameExtensionFilter("CSV", "csv"));
+		
+		int val = myFile.showOpenDialog(MyUI.this);
+		myFile.setVisible(true);
+		ext = myFile.getSelectedFile().toString().substring(myFile.getSelectedFile().toString().length() - 4);
+		System.out.println(ext);
+		if(ext.equals(".csv") == false)
+		{
+			JOptionPane.showMessageDialog(null,"You must select a csv file. Reverting to previous file");
+			return null;
+		}
+		//System.out.println(myFile.getSelectedFile());
+		return myFile.getSelectedFile().toString();
 	}
 }
