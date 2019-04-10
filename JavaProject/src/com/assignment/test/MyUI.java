@@ -222,7 +222,7 @@ public class MyUI extends JFrame implements ActionListener
 		{
 			backUp = trainingDataName;
 			trainingDataName = chooseFile();
-			if(trainingDataName.equals(null))
+			if(trainingDataName == null)
 			{
 				trainingDataName = backUp;
 			}
@@ -264,21 +264,26 @@ public class MyUI extends JFrame implements ActionListener
 	}
 	public String chooseFile()
 	{
-		JFileChooser myFile = new JFileChooser();
+		JFileChooser myFile = new JFileChooser("src");
 		String ext;
 		myFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		myFile.setFileFilter(new FileNameExtensionFilter("CSV", "csv"));
-		
+		//myFile.setCurrentDirectory("src");
+		System.out.println(myFile.getSelectedFile());
 		int val = myFile.showOpenDialog(MyUI.this);
 		myFile.setVisible(true);
-		ext = myFile.getSelectedFile().toString().substring(myFile.getSelectedFile().toString().length() - 4);
-		System.out.println(ext);
-		if(ext.equals(".csv") == false)
+		if(myFile.getSelectedFile() != null)
 		{
-			JOptionPane.showMessageDialog(null,"You must select a csv file. Reverting to previous file");
-			return null;
+			ext = myFile.getSelectedFile().toString().substring(myFile.getSelectedFile().toString().length() - 4);
+			System.out.println(ext);
+			if(ext.equals(".csv") == false)
+			{
+				JOptionPane.showMessageDialog(null,"You must select a csv file. Reverting to previous file");
+				return null;
+			}
+			//System.out.println(myFile.getSelectedFile());
+			return myFile.getSelectedFile().toString();
 		}
-		//System.out.println(myFile.getSelectedFile());
-		return myFile.getSelectedFile().toString();
+		return null;
 	}
 }
