@@ -1,17 +1,18 @@
 package com.assignment.test;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-
+/*A class containing calculations involving naive bayes to be used with the tonsilitis checker
+ * Author: Stephen Healy
+ * 
+ */
 public class Calculation 
 {
-	public float naiveBayesProb(Patient p1)
+	//uses naives bayes' machine learning algorithm to estimate the probability of a passed patient having tonsilitis using passed training data
+	public float naiveBayesProb(Patient p1, String fName)
 	{
 		
-		//training data path
-		String fName = "src\\trainingData.csv";
+		
+		
 		FileProcessor fp = new FileProcessor(); 
 		//total number of lines
 		int rows = fp.countLines(fName);
@@ -21,19 +22,19 @@ public class Calculation
 		//overall probabilities of each outcome for tonsilitis
 		float probTonYes = (float)tonYes/rows;
 		float probTonNo = (float)tonNo/rows;
-		//System.out.println(probTonYes);
+		
 		//patient symptoms
 		String patientTemp = p1.getTemperature();
 		String patientAches = p1.getAches();
 		String patientSoreThroat = p1.getSoreThroat();
-		//need probability of each symptom while tonsilitis occurs
+		//probability of each symptom while tonsilitis occurs
 		float probTemp =(float)fp.countColYes(fName, 0, patientTemp, "yes")/tonYes; 
-		//System.out.println("temp:"+probTemp);
+		
 		float probAches =(float) fp.countColYes(fName, 1, patientAches, "yes") / tonYes; 
-		//System.out.println("Aches:"+probAches);
+		
 		float probSoreThroat =(float) fp.countColYes(fName, 2, patientSoreThroat, "yes") / tonYes; 
-		//System.out.println("ST:"+probSoreThroat);
-		//need probability of each symptom while tonsilitis does not occur
+		
+		//probability of each symptom while tonsilitis does not occur
 		float noProbTemp =(float)fp.countColYes(fName, 0, patientTemp, "no")/tonNo; 
 		float noProbAches =(float) fp.countColYes(fName, 1, patientAches, "no") / tonNo; 
 		float noProbSoreThroat =(float) fp.countColYes(fName, 2, patientSoreThroat, "no") / tonNo; 
@@ -67,36 +68,26 @@ public class Calculation
 		
 		for(int i = 0; i < testPatients.size(); i++)
 		{
-			//System.out.println(( testPatients.get(i).getTonsillitis().equals("yes") && (naiveBayesProb(testPatients.get(i)) > 50.0)  ));
-			//System.out.println(testPatients.get(i).getTonsillitis().equals("no") && (naiveBayesProb(testPatients.get(i)) <= 50));
-			//System.out.println( (testPatients.get(i).getTonsillitis().equals("yes") && (naiveBayesProb(testPatients.get(i)) > 50.0)  )  || (testPatients.get(i).getTonsillitis().equals("no") && (naiveBayesProb(testPatients.get(i)) <= 50)));
-			
+			System.out.println(testPatients.get(i).getTonsillitis());
+			System.out.println(naiveBayesProb(testPatients.get(i), training));
 			if(testPatients.get(i).getTonsillitis().equals("yes"))
 			{
-				if(naiveBayesProb(testPatients.get(i)) > 50.0)
+				if(naiveBayesProb(testPatients.get(i), training) > 50.0)
 				{
-					System.out.println(testPatients.get(i));
-					//System.out.println(naiveBayesProb(testPatients.get(i)));
-					//System.out.println(testPatients.get(i).getTonsillitis());
-					//System.out.println(naiveBayesProb(testPatients.get(i)) <= 50.0);
-					System.out.println("\n");
+					System.out.println("correct");
 					score++;
 				}
 			}
 			else if(testPatients.get(i).getTonsillitis().equals("no"))
 			{
-				if(naiveBayesProb(testPatients.get(i)) <= 50.0)
+				if(naiveBayesProb(testPatients.get(i), training) <= 50.0)
 				{
-					System.out.println(testPatients.get(i));
-					//System.out.println(naiveBayesProb(testPatients.get(i)));
-					//System.out.println(testPatients.get(i).getTonsillitis());
-					//System.out.println(naiveBayesProb(testPatients.get(i)) <= 50.0);
-					System.out.println("\n");
+					System.out.println("correct");
 					score++;
 				}
 			}
 		}
-		System.out.println("score:"+score);
+		
 		return (float)score/testPatients.size()*100;
 	}
 }

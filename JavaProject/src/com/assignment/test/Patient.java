@@ -1,13 +1,23 @@
 package com.assignment.test;
+/*
+ * A Patient class
+ * Author: Stephen Healy
+ * 
+ * 
+ */
+
 
 public class Patient 
 {
-	
+	//attributes
 	private String temperature;
 	private String aches;
 	private String soreThroat;
 	private String tonsillitis;
 	
+	//constructors
+	
+	//used when user inputs symptoms
 	public Patient(String pTemp, String pAches, String pSoreThroat)
 	{
 		
@@ -16,6 +26,7 @@ public class Patient
 		setSoreThroat(pSoreThroat);
 	}
 	
+	//used when reading data from file
 	public Patient(String pTemp, String pAches, String pSoreThroat, String pTonsillitis)
 	{
 		
@@ -34,7 +45,7 @@ public class Patient
 	}
 
 	
-
+	//setters and getters
 	public String getTemperature() {
 		return temperature;
 	}

@@ -1,6 +1,5 @@
 package com.assignment.test;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +17,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 /*
- * UI class that allows a user to enter their symptoms and recieve a percentage chance of having tonsilitis
+ * UI class that allows a user to enter their symptoms and recieve a percentage chance of having tonsillitis 
+ * Includes access to a second menu which allows user to select the data that they use for the algorithms
+ * 
+ * Author: Stephen Healy
  */
 public class MyUI extends JFrame implements ActionListener
 {
@@ -29,54 +31,60 @@ public class MyUI extends JFrame implements ActionListener
 	
 	//panels
 	
-	JPanel patientPanel = new JPanel();
-	JPanel namePanel = new JPanel();
-	JPanel tempPanel = new JPanel();
-	JPanel achesPanel = new JPanel();
-	JPanel stPanel = new JPanel();
-	JPanel submitPanel = new JPanel();
+	private JPanel patientPanel = new JPanel();
+	private JPanel namePanel = new JPanel();
+	private JPanel tempPanel = new JPanel();
+	private JPanel achesPanel = new JPanel();
+	private JPanel stPanel = new JPanel();
+	private JPanel submitPanel = new JPanel();
 	
-	JPanel filePanel = new JPanel();
+	private JPanel filePanel = new JPanel();
 	
 	//name components
-	JLabel nameLabel = new JLabel("Name:");
-	JTextField nameField = new JTextField();
+	private JLabel nameLabel = new JLabel("Name:");
+	private JTextField nameField = new JTextField();
 	
 	
 	//Temperature components
-	ButtonGroup temperatureGroup = new ButtonGroup();
-	JRadioButton coolButton = new JRadioButton("cool"); 
-	JRadioButton normalButton = new JRadioButton("normal");
-	JRadioButton hotButton = new JRadioButton("hot");
-	JLabel tempLabel = new JLabel("Temperature:");
+	private ButtonGroup temperatureGroup = new ButtonGroup();
+	private JRadioButton coolButton = new JRadioButton("cool"); 
+	private JRadioButton normalButton = new JRadioButton("normal");
+	private JRadioButton hotButton = new JRadioButton("hot");
+	private JLabel tempLabel = new JLabel("Temperature:");
 	
 	
 	//Aches components
-	JLabel achesLabel = new JLabel("Aches:");
-	ButtonGroup achesGroup = new ButtonGroup();
-	JRadioButton aYes = new JRadioButton("Yes");
-	JRadioButton aNo = new JRadioButton("No");
+	private JLabel achesLabel = new JLabel("Aches:");
+	private ButtonGroup achesGroup = new ButtonGroup();
+	private JRadioButton aYes = new JRadioButton("Yes");
+	private JRadioButton aNo = new JRadioButton("No");
 	
 	
 	
 	//Sore Throat components
-	JLabel stLabel = new JLabel("Sore Throat:");
-	ButtonGroup stGroup = new ButtonGroup();
-	JRadioButton stYes = new JRadioButton("Yes");
-	JRadioButton stNo = new JRadioButton("No");
+	private JLabel stLabel = new JLabel("Sore Throat:");
+	private ButtonGroup stGroup = new ButtonGroup();
+	private JRadioButton stYes = new JRadioButton("Yes");
+	private JRadioButton stNo = new JRadioButton("No");
 	
-	JButton submit = new JButton("Submit");
-	JButton test = new JButton("Test Data");
+	//buttons
+	private JButton submit = new JButton("Submit");
+	private JButton test = new JButton("Test Data");
 	
 	JButton fMenuButton = new JButton("Select data files");
-	JButton selectTrainData = new JButton("Select Training Data");
-	JButton selectTestData = new JButton("Select Test Data");
-	JButton returnToMain = new JButton("Return to Main Menu");
 	
-	String testDataName = "src\\testData.csv";
-	String trainingDataName = "src\\trainingData.csv";
-	public MyUI()
+	//file menu buttons
+	private JButton selectTrainData = new JButton("Select Training Data");
+	private JButton selectTestData = new JButton("Select Test Data");
+	private JButton returnToMain = new JButton("Return to Main Menu");
+	
+	private String testDataName = "src\\testData.csv";
+	private String trainingDataName = "src\\trainingData.csv";
+	
+	//constructor
+	public MyUI(String title)
 	{
+		super(title);
 		submissionMade = false;
 		
 		
@@ -167,9 +175,9 @@ public class MyUI extends JFrame implements ActionListener
 		Calculation calc1 = new Calculation();
 		ArrayList<Patient> pList = new ArrayList<Patient>();
 		FileProcessor testProcessor = new FileProcessor();
-		String backUp; //acts as a backup incase a user does not select a correct file
+		String backUp; //acts as a backup in case a user does not select a correct file
 		
-		
+		//submit buton is pressed
 		if(e.getSource() == submit)
 		{
 			if(nameField.getText().equals(""))
@@ -179,7 +187,7 @@ public class MyUI extends JFrame implements ActionListener
 			//check to see if a button for each symptom has been pressed
 			else if(( (coolButton.isSelected() == false) &&  (normalButton.isSelected() == false) &&  (hotButton.isSelected() == false)) || ((aYes.isSelected() == false) && (aNo.isSelected() == false)) || (stYes.isSelected() == false) && (stNo.isSelected() == false))
 			{
-				JOptionPane.showMessageDialog(null,"Please enter Your values.");
+				JOptionPane.showMessageDialog(null,"Please enter your values.");
 			}
 			else
 			{	
@@ -191,24 +199,28 @@ public class MyUI extends JFrame implements ActionListener
 				//submissionMade = true;
 				
 				p1 = new Patient(pTemp, pAches, pSoreThroat);
-				JOptionPane.showMessageDialog(null,"There is a " + calc1.naiveBayesProb(p1) + "% chance that you have tonsilitis");
+				JOptionPane.showMessageDialog(null,"There is a " + calc1.naiveBayesProb(p1, trainingDataName) + "% chance that you have tonsilitis");
 			}
 			
 		}
+		//test button is pressed
 		else if(e.getSource() == test)
 		{
 			JOptionPane.showMessageDialog(null,"Data is approximately " + calc1.testData(trainingDataName, testDataName) + "% accurate");
 			
 			
 		}
+		//file menu button is pressed
 		else if(e.getSource() == fMenuButton)
 		{
 			fileMenuOn();
 		}
+		//return to main menu button is pressed
 		else if(e.getSource() == returnToMain)
 		{
 			fileMenuOff();
 		}
+		//select test data button is pressed
 		else if(e.getSource() == selectTestData)
 		{
 			backUp = testDataName;
@@ -218,6 +230,7 @@ public class MyUI extends JFrame implements ActionListener
 				testDataName = backUp;
 			}
 		}
+		//select training data button is pressed
 		else if(e.getSource() == selectTrainData)
 		{
 			backUp = trainingDataName;
@@ -229,6 +242,7 @@ public class MyUI extends JFrame implements ActionListener
 		}
 	}
 	
+	//passes a button group and returns the selected value of that group
 	public String getSelectedButton(ButtonGroup bg)
 	{
 		return bg.getSelection().getActionCommand();
@@ -242,6 +256,7 @@ public class MyUI extends JFrame implements ActionListener
 		this.submissionMade = submissionMade;
 	}
 	
+	//displays the file menu by setting all main menu panels to invisible and setting the file menu panel to visible
 	private void fileMenuOn()
 	{
 		namePanel.setVisible(false);
@@ -252,6 +267,7 @@ public class MyUI extends JFrame implements ActionListener
 		
 		filePanel.setVisible(true);
 	}
+	//displays the main menu by setting all main menu panels to visible and setting the file menu panel to invisible
 	private void fileMenuOff()
 	{
 		namePanel.setVisible(true);
@@ -262,6 +278,10 @@ public class MyUI extends JFrame implements ActionListener
 		
 		filePanel.setVisible(false);
 	}
+	
+	
+	//allows the user to select a file using a jfilechooser and returns the path of that file as a string. 
+	//returns null if no file is selected or if a file other than a .csv file is selected
 	public String chooseFile()
 	{
 		JFileChooser myFile = new JFileChooser("src");

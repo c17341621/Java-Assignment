@@ -1,0 +1,12 @@
+hot,yes,no,no
+hot,yes,yes,yes
+hot,no,no,yes
+normal,no,yes,no
+cool,yes,yes,yes
+cool,yes,no,yes
+cool,no,no,no
+normal,no,yes,no
+cool,no,no,yes
+normal,yes,yes,no
+normal,yes,yes,no
+normal,no,yes,no

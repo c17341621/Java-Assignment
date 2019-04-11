@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
-
 /*
  * A class for reading and manipulating the data in the csv file "trainingData.csv"
  */
@@ -22,6 +20,7 @@ public class FileProcessor
 		
 	}
 	
+	//passes a string and checks returns whether that file exists or not
 	public boolean fileExists(String fileName)
 	{
 		File f1 = new File(fileName);
@@ -45,6 +44,7 @@ public class FileProcessor
 		
 	}
 	
+	//prints the contents of a file
 	public void printAll(String fileName)
 	{
 		File f1 = new File(fileName);
@@ -72,6 +72,7 @@ public class FileProcessor
 			
 	}
 	
+	//prints a single column of a file
 	public void printCol(String fileName)
 	{
 		File f1 = new File(fileName);
@@ -148,6 +149,7 @@ public class FileProcessor
 		return counter;
 	}
 	
+	//returns the number of lines in a file
 	public int countLines(String fileName)
 	{
 		File f1 = new File(fileName);
